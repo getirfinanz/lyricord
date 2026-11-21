@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <title>Lyricord</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Text comes from i18n.js: data-i18n fills textContent, data-i18n-label fills aria-label. -->
+
+  <!-- Live preview, shaped like a Discord profile popout -->
+  <section class="profile" data-i18n-label="previewLabel">
+    <div class="who">
+      <div class="avatar">
+        <img id="pv-avatar" alt="" width="40" height="40" hidden>
+        <span class="presence" id="presence" aria-hidden="true"></span>
+      </div>
+      <div class="who-text">
+        <p class="who-name" id="pv-user"></p>
+        <p class="who-line" id="pv-line"></p>
+      </div>
+      <span class="status" id="conn" data-state="checking" role="status"></span>
+    </div>
+
+    <div class="activity">
+      <div class="activity-head">
+        <span id="pv-head"></span>
+        <span class="sample" id="pv-sample" data-i18n="sample"></span>
+      </div>
+      <div class="np">
+        <div class="art-wrap" id="pv-artwrap">
+          <div class="art" id="pv-art"><span>♪</span></div>
+          <img class="badge" id="pv-badge" alt="" width="22" height="22">
+        </div>
+        <div class="np-meta">
+          <p class="np-title" id="pv-title"></p>
+          <p class="np-artist" id="pv-artist"></p>
+          <p class="np-lyric" id="pv-lyric" hidden></p>
+          <div class="progress" id="pv-bar">
+            <span id="pv-pos">1:12</span>
+            <div class="track"><div class="fill" id="pv-fill"></div></div>
+            <span id="pv-dur">3:30</span>
+          </div>
+        </div>
+      </div>
+      <div class="np-button" id="pv-button"></div>
+    </div>
+  </section>
+
+  <div class="notice" id="hint" role="alert" hidden>
+    <p class="notice-title" id="hint-title"></p>
+    <p id="hint-body"></p>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" role="tab" id="tab-look" aria-controls="panel-look" aria-selected="true" data-i18n="tabLook"></button>
+    <button type="button" role="tab" id="tab-sites" aria-controls="panel-sites" aria-selected="false" data-i18n="tabGeneral"></button>
+  </nav>
+
+  <form id="form">
+    <!-- Appearance -->
+    <section class="panel" id="panel-look" role="tabpanel" aria-labelledby="tab-look">
+      <p class="setting-label" data-i18n="underName"></p>
+      <div class="segmented" role="radiogroup" data-i18n-label="underName">
+        <label><input type="radio" name="statusDisplay" value="details"><span data-i18n="optTitle"></span></label>
+        <label><input type="radio" name="statusDisplay" value="state"><span data-i18n="optArtist"></span></label>
+        <label><input type="radio" name="statusDisplay" value="name"><span data-i18n="optSite"></span></label>
+      </div>
+
+      <div class="list">
+        <label class="item">
+          <span class="item-text">
+            <span class="item-title" data-i18n="artTitle"></span>
+            <span class="item-desc" data-i18n="artDesc"></span>
+          </span>
+          <input type="checkbox" class="switch" name="showArt">
+        </label>
+        <label class="item">
+          <span class="item-text">
+            <span class="item-title" data-i18n="logoTitle"></span>
+            <span class="item-desc" data-i18n="logoDesc"></span>
+          </span>
+          <input type="checkbox" class="switch" name="showSiteLogo">
+        </label>
+        <label class="item">
+          <span class="item-text">
+            <span class="item-title" data-i18n="lyricsTitle"></span>
+            <span class="item-desc" data-i18n="lyricsDesc"></span>
+          </span>
+          <input type="checkbox" class="switch" name="showLyrics">
+        </label>
+        <label class="item">
+          <span class="item-text">
+            <span class="item-title" data-i18n="timeTitle"></span>
+            <span class="item-desc" data-i18n="timeDesc"></span>
+          </span>
+          <input type="checkbox" class="switch" name="showTimestamps">
+        </label>
+        <label class="item">
+          <span class="item-text">
+            <span class="item-title" data-i18n="buttonTitle"></span>
+            <span class="item-desc" data-i18n="buttonDesc"></span>
+          </span>
+          <input type="checkbox" class="switch" name="showButton">
+        </label>
+      </div>
+    </section>
+
+    <!-- General -->
+    <section class="panel" id="panel-sites" role="tabpanel" aria-labelledby="tab-sites" hidden>
+      <div class="list sites">
+        <label class="item">
+          <img class="site-logo" id="logo-youtube" alt="" width="24" height="24">
+          <span class="item-text">
+            <span class="item-title">YouTube Music</span>
+            <span class="item-desc" id="desc-youtube"></span>
+          </span>
+          <input type="checkbox" class="switch" name="site-youtube">
+        </label>
+        <label class="item">
+          <img class="site-logo" id="logo-soundcloud" alt="" width="24" height="24">
+          <span class="item-text">
+            <span class="item-title">SoundCloud</span>
+            <span class="item-desc" id="desc-soundcloud"></span>
+          </span>
+          <input type="checkbox" class="switch" name="site-soundcloud">
+        </label>
+        <label class="item">
+          <img class="site-logo" id="logo-spotify" alt="" width="24" height="24">
+          <span class="item-text">
+            <span class="item-title">Spotify</span>
+            <span class="item-desc" id="desc-spotify"></span>
+          </span>
+          <input type="checkbox" class="switch" name="site-spotify">
+        </label>
+        <label class="item">
+          <img class="site-logo" id="logo-apple" alt="" width="24" height="24">
+          <span class="item-text">
+            <span class="item-title">Apple Music</span>
+            <span class="item-desc" id="desc-apple"></span>
+          </span>
+          <input type="checkbox" class="switch" name="site-apple">
+        </label>
+      </div>
+      <div class="list spaced">
+        <label class="item">
+          <span class="item-text">
+            <span class="item-title" data-i18n="pauseTitle"></span>
+            <span class="item-desc" data-i18n="pauseDesc"></span>
+          </span>
+          <input type="checkbox" class="switch" name="keepOnPause">
+        </label>
+      </div>
+      <div class="feedback">
+        <p class="feedback-text item-title" data-i18n="feedbackTitle"></p>
+        <div class="fb-row">
+          <a class="fb fb-discord" id="fb-discord" target="_blank" rel="noopener" hidden>Discord</a>
+          <a class="fb fb-whatsapp" id="fb-whatsapp" target="_blank" rel="noopener" hidden>WhatsApp</a>
+          <a class="fb fb-instagram" id="fb-instagram" target="_blank" rel="noopener" hidden>Instagram</a>
+        </div>
+      </div>
+    </section>
+  </form>
+
+  <footer class="app-footer">
+    <span class="brand">
+      <img src="icons/icon32.png" alt="" width="16" height="16">
+      <span data-i18n="appName">Lyricord</span>
+      <span class="version" id="version"></span>
+    </span>
+    <div class="lang" role="radiogroup" data-i18n-label="language">
+      <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <span class="credit">Made By <strong>Fare</strong></span>
+    <a id="repo" href="https://github.com/getirfinanz/lyricord" target="_blank" rel="noopener" hidden>GitHub</a>
+  </footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

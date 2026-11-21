@@ -1,0 +1,344 @@
+/* Discord's own dark palette, so the popup reads as part of Discord. */
+:root {
+  --bg: #313338;           /* chat background */
+  --panel: #2B2D31;        /* lists, sidebars */
+  --deep: #1E1F22;         /* inputs, segmented control, profile body */
+  --popout: #232428;       /* profile popout */
+  --hover: #35373C;
+  --selected: #404249;
+  --line: #3F4147;
+  --text: #F2F3F5;
+  --text-2: #DBDEE1;
+  --muted: #B5BAC1;
+  --faint: #949BA4;
+  --blurple: #5865F2;
+  --link: #00A8FC;
+  --green: #23A55A;
+  --yellow: #F0B232;
+  --red: #F23F43;
+  --gray: #80848E;
+  --font: "gg sans", "Noto Sans", "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+p { margin: 0; }
+
+body {
+  width: 360px;
+  margin: 0;
+  padding: 10px 12px 8px;
+  background: var(--bg);
+  color: var(--text-2);
+  font: 14px/1.375 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- profile popout (preview) ---------- */
+.profile {
+  border-radius: 8px;
+  background: var(--popout);
+  box-shadow: 0 8px 16px rgb(0 0 0 / .24);
+  overflow: hidden;
+}
+
+.who { display: flex; align-items: center; gap: 10px; padding: 12px 12px 10px; }
+.avatar { position: relative; flex: none; width: 40px; height: 40px; }
+.avatar img, .avatar::before {
+  width: 40px; height: 40px; border-radius: 50%;
+}
+.avatar::before { content: ""; position: absolute; inset: 0; background: var(--blurple); }
+.avatar img { position: relative; display: block; object-fit: cover; }
+.avatar img[hidden] { display: none; }
+.presence {
+  position: absolute; right: -2px; bottom: -2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 3px solid var(--popout);
+  background: var(--gray);
+}
+.presence[data-on="true"] { background: var(--green); }
+
+.who-text { flex: 1; min-width: 0; }
+.who-name { color: var(--text); font-size: 16px; font-weight: 700; line-height: 20px; }
+.who-line { color: var(--muted); font-size: 12.5px; line-height: 16px; }
+.who-name, .who-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.status {
+  flex: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--deep);
+  color: var(--muted);
+  font-size: 12px; font-weight: 600;
+  white-space: nowrap;
+}
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gray); }
+.status[data-state="ok"]::before   { background: var(--green); }
+.status[data-state="warn"]::before { background: var(--yellow); }
+.status[data-state="bad"]::before  { background: var(--red); }
+
+.activity[hidden] { display: none; }
+.activity { margin: 0 8px 8px; padding: 10px 10px 10px; border-radius: 8px; background: var(--deep); }
+.activity-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  color: var(--text-2);
+  font-size: 12px; font-weight: 700;
+}
+#pv-head { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sample {
+  flex: none;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--blurple);
+  color: #fff;
+  font-size: 11px; font-weight: 600; line-height: 16px;
+}
+.sample[hidden] { display: none; }
+
+.np { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+.art-wrap { position: relative; flex: none; }
+.art-wrap[hidden] { display: none; }
+.art {
+  width: 64px; height: 64px;
+  border-radius: 8px;
+  background: var(--selected) center / cover no-repeat;
+  display: grid; place-items: center;
+  font-size: 26px; color: var(--faint);
+}
+.art.has-img span { display: none; }
+.badge {
+  position: absolute; right: -4px; bottom: -4px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--deep);
+  background: var(--deep);
+  object-fit: cover;
+}
+.badge[hidden] { display: none; }
+
+.np-meta { min-width: 0; flex: 1; font-size: 13px; line-height: 17px; }
+.np-title, .np-artist, .np-lyric { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.np-title { color: var(--text); font-weight: 600; }
+.np-artist, .np-lyric { color: var(--text-2); }
+.np-lyric[hidden] { display: none; }
+
+.progress {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 6px;
+  color: var(--text-2);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.progress[hidden] { display: none; }
+.track { flex: 1; height: 4px; border-radius: 2px; background: rgb(255 255 255 / .2); overflow: hidden; }
+.fill { height: 100%; width: 34%; background: var(--text); transition: width .3s; }
+
+.np-button {
+  margin-top: 10px;
+  padding: 6px;
+  border-radius: 8px;
+  background: var(--selected);
+  color: var(--text);
+  text-align: center;
+  font-size: 13px; font-weight: 600;
+}
+.np-button[hidden] { display: none; }
+
+/* ---------- notice ---------- */
+.notice {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 4px solid var(--yellow);
+  background: rgb(240 178 50 / .1);
+  font-size: 13px;
+  color: var(--text-2);
+}
+.notice[data-level="bad"] { border-left-color: var(--red); background: rgb(242 63 67 / .1); }
+.notice-title { font-weight: 700; color: var(--text); }
+.notice[hidden] { display: none; }
+
+/* ---------- tabs (Discord's Friends-page pills) ---------- */
+/* Full-width bar; the lighter pill slides under the selected tab. */
+.tabs {
+  position: relative;
+  display: flex;
+  margin: 8px 0;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--deep);
+}
+.tabs::before {
+  content: "";
+  position: absolute; top: 2px; bottom: 2px; left: 2px;
+  width: calc(50% - 2px);
+  border-radius: 6px;
+  background: var(--selected);
+  transition: transform .2s ease;
+}
+.tabs[data-tab="sites"]::before { transform: translateX(100%); }
+.tabs button {
+  position: relative; /* above the pill */
+  flex: 1;
+  appearance: none;
+  border: 0;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font: 500 15px/22px var(--font);
+  cursor: pointer;
+  transition: color .15s;
+}
+.tabs button:hover { color: var(--text-2); }
+.tabs button[aria-selected="true"] { color: var(--text); }
+
+/* ---------- settings ---------- */
+.panel[hidden] { display: none; }
+.setting-label {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px; font-weight: 700;
+}
+.segmented + .list { margin-top: 10px; }
+
+.list { border-radius: 8px; background: var(--panel); overflow: hidden; }
+.item {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 38px;
+  padding: 3px 12px;
+  cursor: pointer;
+}
+.item + .item { border-top: 1px solid var(--line); }
+.item:hover { background: var(--hover); }
+.item-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.item-title { color: var(--text); font-size: 14px; font-weight: 500; line-height: 18px; }
+.item-desc { color: var(--faint); font-size: 12px; line-height: 15px; }
+.item-desc.playing { color: var(--green); font-weight: 600; }
+.site-logo { flex: none; width: 24px; height: 24px; border-radius: 6px; }
+/* four sites: a little tighter so the General tab stays within Chrome's 600px popup limit */
+.sites .item { min-height: 34px; padding-top: 2px; padding-bottom: 2px; }
+.sites .item-title { line-height: 17px; }
+.sites .item-desc { line-height: 14px; }
+
+.list.spaced { margin-top: 10px; }
+
+/* report a problem / ask for something */
+.feedback {
+  margin-top: 10px;
+  padding: 6px 12px 8px;
+  border-radius: 8px;
+  background: var(--panel);
+}
+.feedback-text { font-size: 13px; line-height: 18px; }
+.fb-row { display: flex; gap: 6px; margin-top: 6px; }
+.fb {
+  flex: 1;
+  padding: 5px 6px;
+  text-align: center;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12.5px; font-weight: 600;
+  text-decoration: none;
+}
+.fb[hidden] { display: none; }
+.fb-discord { background: var(--blurple); }
+.fb-whatsapp { background: #1DA851; }    /* WhatsApp green, darkened for white text */
+.fb-instagram { background: linear-gradient(45deg, #E1306C, #C13584 55%, #833AB4); }
+.fb:hover { filter: brightness(1.1); }
+.fb:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+/* switch: Discord's toggle, green when on */
+.switch {
+  appearance: none;
+  flex: none;
+  width: 40px; height: 24px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--gray);
+  position: relative;
+  cursor: pointer;
+  transition: background .15s;
+}
+.switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff;
+  transition: transform .15s;
+}
+.switch:checked { background: var(--green); }
+.switch:checked::after { transform: translateX(16px); }
+
+/* segmented control */
+.segmented {
+  display: flex; gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--deep);
+}
+.segmented label { flex: 1; cursor: pointer; }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented span {
+  display: block;
+  padding: 6px 4px;
+  border-radius: 6px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px; font-weight: 500;
+  transition: background .15s, color .15s;
+}
+.segmented label:hover span { color: var(--text); }
+.segmented input:checked + span { background: var(--blurple); color: #fff; font-weight: 600; }
+
+/* keyboard focus */
+.switch:focus-visible,
+.segmented input:focus-visible + span,
+.tabs button:focus-visible,
+.lang button:focus-visible,
+.app-footer a:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+/* ---------- footer ---------- */
+.app-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid var(--line);
+  color: var(--faint);
+  font-size: 12px;
+}
+.brand { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+.brand img { border-radius: 4px; }
+.version { color: var(--faint); font-weight: 400; }
+.app-footer a { color: var(--link); text-decoration: none; }
+.app-footer a:hover { text-decoration: underline; }
+.app-footer a[hidden] { display: none; }
+
+.lang { display: inline-flex; padding: 2px; border-radius: 6px; background: var(--deep); }
+.lang button {
+  appearance: none;
+  border: 0;
+  padding: 1px 7px;
+  border-radius: 4px;
+  background: none;
+  color: var(--faint);
+  font: 600 11px/16px var(--font);
+  cursor: pointer;
+}
+.lang button:hover { color: var(--text); }
+.lang button[aria-pressed="true"] { background: var(--selected); color: var(--text); }
+
+.credit { white-space: nowrap; }
+.credit strong {
+  font-weight: 700;
+  background: linear-gradient(90deg, #FF3D5A, #FF7A1A); /* the sound waves in the icon */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
